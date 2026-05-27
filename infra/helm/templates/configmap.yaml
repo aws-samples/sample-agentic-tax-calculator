@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-config
+  labels:
+    app: {{ .Chart.Name }}
+    release: {{ .Release.Name }}
+data:
+  TAX_CALC_DEPLOYMENT_MODE: {{ .Values.config.deploymentMode | quote }}
+  TAX_CALC_DATA_SOURCE_MODE: {{ .Values.config.dataSourceMode | quote }}
+  TAX_CALC_AWS_REGION: {{ .Values.config.awsRegion | quote }}
+  TAX_CALC_DYNAMODB_TABLE_NAME: {{ .Values.config.dynamodbTableName | quote }}
+  TAX_CALC_MEMORY_TABLE_NAME: {{ .Values.config.memoryTableName | quote }}
+  TAX_CALC_LOG_LEVEL: {{ .Values.config.logLevel | quote }}
+  TAX_CALC_LLM_MODEL_ID: {{ .Values.config.llmModelId | quote }}
+  TAX_CALC_MEMORY_RETENTION_DAYS: {{ .Values.config.memoryRetentionDays | quote }}
+  TAX_CALC_STREAMLIT_METRICS_PORT: {{ .Values.observability.streamlitMetricsPort | quote }}

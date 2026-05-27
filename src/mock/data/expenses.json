@@ -1,0 +1,65 @@
+{
+  "BIZ001": {
+    "profitAndLoss": {
+      "businessId": "BIZ001",
+      "taxYear": 2024,
+      "accounts": [
+        {
+          "name": "Office Rent",
+          "type": "DEBIT",
+          "amount": 18000.00
+        },
+        {
+          "name": "Software Subscriptions",
+          "type": "DEBIT",
+          "amount": 3600.00
+        },
+        {
+          "name": "Professional Development",
+          "type": "DEBIT",
+          "amount": 2400.00
+        },
+        {
+          "name": "Insurance",
+          "type": "DEBIT",
+          "amount": 1800.00
+        }
+      ],
+      "totalExpenses": 25800.00
+    }
+  },
+  "BIZ002": {
+    "profitAndLoss": {
+      "businessId": "BIZ002",
+      "taxYear": 2024,
+      "accounts": [
+        {
+          "name": "Salaries",
+          "type": "DEBIT",
+          "amount": 95000.00
+        },
+        {
+          "name": "Office Rent",
+          "type": "DEBIT",
+          "amount": 24000.00
+        },
+        {
+          "name": "Equipment",
+          "type": "DEBIT",
+          "amount": 8000.00
+        },
+        {
+          "name": "Marketing",
+          "type": "DEBIT",
+          "amount": 6000.00
+        },
+        {
+          "name": "Insurance",
+          "type": "DEBIT",
+          "amount": 3000.00
+        }
+      ],
+      "totalExpenses": 136000.00
+    }
+  }
+}

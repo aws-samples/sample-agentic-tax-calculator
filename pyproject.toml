@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agentic-tax-calculator"
+version = "0.1.0"
+description = "Agentic Canadian tax calculator - AWS AgentCore starter kit"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT-0"}
+
+dependencies = [
+    "pydantic>=2.0",
+    "pydantic-settings>=2.0",
+    "langgraph>=0.2",
+    "mcp[server]",
+    "boto3",
+    "httpx",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "hypothesis",
+    "pytest-asyncio",
+    "strawberry-graphql[asgi]>=0.220",
+    "uvicorn>=0.27",
+]
+demo = [
+    "streamlit>=1.30",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"

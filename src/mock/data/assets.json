@@ -1,0 +1,28 @@
+{
+  "BIZ001": {
+    "taxAccounts": {
+      "businessId": "BIZ001",
+      "taxYear": 2024,
+      "hstCollected": 17550.00,
+      "hstPaid": 3354.00,
+      "netHst": 14196.00,
+      "province": "ON",
+      "rate": 0.13,
+      "rateType": "HST",
+      "description": "Ontario HST at 13% (5% federal + 8% provincial)"
+    }
+  },
+  "BIZ002": {
+    "taxAccounts": {
+      "businessId": "BIZ002",
+      "taxYear": 2024,
+      "hstCollected": 12750.00,
+      "hstPaid": 6800.00,
+      "netHst": 5950.00,
+      "province": "BC",
+      "rate": 0.05,
+      "rateType": "GST",
+      "description": "BC GST at 5% (PST 7% collected separately by province)"
+    }
+  }
+}

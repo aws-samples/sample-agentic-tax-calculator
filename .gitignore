@@ -1,0 +1,25 @@
+__pycache__/
+*.pyc
+*.egg-info/
+.langgraph_api/
+dist/
+build/
+*.pckl
+.env
+.env.*
+!.env.example
+*.egg
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+*.pem
+*.key
+credentials*

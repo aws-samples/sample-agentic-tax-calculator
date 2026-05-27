@@ -1,0 +1,62 @@
+{
+  "federal": {
+    "taxYear": 2024,
+    "brackets": [
+      { "min": 0, "max": 55867, "rate": 0.15 },
+      { "min": 55867, "max": 111733, "rate": 0.205 },
+      { "min": 111733, "max": 154906, "rate": 0.26 },
+      { "min": 154906, "max": 220000, "rate": 0.29 },
+      { "min": 220000, "max": null, "rate": 0.33 }
+    ],
+    "basicPersonalAmount": 15705
+  },
+  "provincial": {
+    "ON": {
+      "jurisdiction": "ON",
+      "name": "Ontario",
+      "taxYear": 2024,
+      "brackets": [
+        { "min": 0, "max": 51446, "rate": 0.0505 },
+        { "min": 51446, "max": 102894, "rate": 0.0915 },
+        { "min": 102894, "max": 150000, "rate": 0.1116 },
+        { "min": 150000, "max": 220000, "rate": 0.1216 },
+        { "min": 220000, "max": null, "rate": 0.1316 }
+      ],
+      "basicPersonalAmount": 11865
+    },
+    "BC": {
+      "jurisdiction": "BC",
+      "name": "British Columbia",
+      "taxYear": 2024,
+      "brackets": [
+        { "min": 0, "max": 45654, "rate": 0.0506 },
+        { "min": 45654, "max": 91310, "rate": 0.077 },
+        { "min": 91310, "max": 104835, "rate": 0.105 },
+        { "min": 104835, "max": 127299, "rate": 0.1229 },
+        { "min": 127299, "max": 172602, "rate": 0.147 },
+        { "min": 172602, "max": 240716, "rate": 0.168 },
+        { "min": 240716, "max": null, "rate": 0.205 }
+      ],
+      "basicPersonalAmount": 11981
+    }
+  },
+  "cpp": {
+    "taxYear": 2024,
+    "rate": 0.1190,
+    "employeeRate": 0.0595,
+    "maxPensionableEarnings": 68500,
+    "basicExemption": 3500,
+    "maxContribution": 3867.50,
+    "maxSelfEmployedContribution": 7735.00,
+    "description": "Canada Pension Plan contributions for 2024"
+  },
+  "ei": {
+    "taxYear": 2024,
+    "rate": 0.0229,
+    "employerRate": 0.032,
+    "maxInsurableEarnings": 63200,
+    "maxPremium": 1049.12,
+    "maxSelfEmployedPremium": 1049.12,
+    "description": "Employment Insurance premiums for 2024"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "BIZ001": {
+    "profitAndLoss": {
+      "businessId": "BIZ001",
+      "taxYear": 2024,
+      "accounts": [
+        {
+          "name": "Consulting Revenue",
+          "type": "CREDIT",
+          "amount": 120000.00
+        },
+        {
+          "name": "Workshop Revenue",
+          "type": "CREDIT",
+          "amount": 15000.00
+        }
+      ],
+      "totalRevenue": 135000.00
+    }
+  },
+  "BIZ002": {
+    "profitAndLoss": {
+      "businessId": "BIZ002",
+      "taxYear": 2024,
+      "accounts": [
+        {
+          "name": "Web Design Services",
+          "type": "CREDIT",
+          "amount": 200000.00
+        },
+        {
+          "name": "Hosting Revenue",
+          "type": "CREDIT",
+          "amount": 30000.00
+        },
+        {
+          "name": "Maintenance Contracts",
+          "type": "CREDIT",
+          "amount": 25000.00
+        }
+      ],
+      "totalRevenue": 255000.00
+    }
+  }
+}

@@ -1,0 +1,48 @@
+# Default values for agentic-tax-calculator Helm chart.
+
+replicaCount: 2
+
+image:
+  repository: agentic-tax-calculator
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8000
+
+resources:
+  requests:
+    cpu: 256m
+    memory: 512Mi
+  limits:
+    cpu: "1"
+    memory: 1Gi
+
+config:
+  deploymentMode: kubernetes
+  dataSourceMode: mock
+  awsRegion: us-east-1
+  dynamodbTableName: tax-calc-shared-state
+  memoryTableName: tax-calc-memory
+  logLevel: INFO
+  llmModelId: "anthropic.claude-sonnet-4-6-20250514"
+  memoryRetentionDays: "90"
+
+# Okta auth - leave empty for mock mode
+auth:
+  oktaDomain: ""
+  oktaClientId: ""
+  oktaClientSecret: ""
+
+# Observability
+observability:
+  datadogApiKey: ""
+  streamlitMetricsPort: "8501"
+
+# Pod annotations (e.g. for Datadog autodiscovery)
+podAnnotations: {}
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

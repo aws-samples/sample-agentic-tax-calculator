@@ -1,0 +1,28 @@
+[project]
+name = "agentic-tax-calculator-studio"
+version = "0.1.0"
+description = "Agentic Tax Calculator - LangGraph Studio multi-agent demo"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "boto3>=1.35.87",
+    "langchain-aws>=0.2.10",
+    "langgraph-cli[inmem]>=0.1.65",
+    "langgraph>=0.2.60",
+    "pydantic>=2.0",
+]
+
+[build-system]
+requires = ["setuptools>=73.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["tax_supervisor", "business_agent", "income_agent", "expense_agent", "asset_agent", "tax_agent", "shared"]
+[tool.setuptools.package-dir]
+"tax_supervisor" = "src/tax_supervisor"
+"business_agent" = "src/business_agent"
+"income_agent" = "src/income_agent"
+"expense_agent" = "src/expense_agent"
+"asset_agent" = "src/asset_agent"
+"tax_agent" = "src/tax_agent"
+"shared" = "src/shared"

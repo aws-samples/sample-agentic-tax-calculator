@@ -1,0 +1,38 @@
+{
+  "BIZ001": {
+    "business": {
+      "id": "BIZ001",
+      "name": "Maple Leaf Consulting",
+      "accountingMethod": "CASH",
+      "jurisdiction": "ON",
+      "fiscalYearEnd": "2024-12-31",
+      "businessType": "SOLE_PROPRIETORSHIP",
+      "address": {
+        "city": "Toronto",
+        "province": "Ontario",
+        "postalCode": "M5V 2T6",
+        "country": "CA"
+      },
+      "gstHstNumber": "123456789RT0001",
+      "taxYear": 2024
+    }
+  },
+  "BIZ002": {
+    "business": {
+      "id": "BIZ002",
+      "name": "Pacific Web Design",
+      "accountingMethod": "ACCRUAL",
+      "jurisdiction": "BC",
+      "fiscalYearEnd": "2024-12-31",
+      "businessType": "INCORPORATED",
+      "address": {
+        "city": "Vancouver",
+        "province": "British Columbia",
+        "postalCode": "V6B 1A1",
+        "country": "CA"
+      },
+      "gstHstNumber": "987654321RT0001",
+      "taxYear": 2024
+    }
+  }
+}

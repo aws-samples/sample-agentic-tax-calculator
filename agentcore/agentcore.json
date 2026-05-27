@@ -1,0 +1,30 @@
+{
+  "name": "agentic-tax-calculator",
+  "version": 1,
+  "tags": {
+    "agentcore:created-by": "agentcore-cli",
+    "agentcore:project-name": "agentic-tax-calculator"
+  },
+  "agents": [
+    {
+      "type": "AgentCoreRuntime",
+      "name": "agentic-tax-calculator",
+      "build": "CodeZip",
+      "entrypoint": "mcp_server.py",
+      "codeLocation": ".",
+      "runtimeVersion": "PYTHON_3_13",
+      "networkMode": "PUBLIC",
+      "protocol": "MCP"
+    }
+  ],
+  "memories": [
+    {
+      "name": "tax-calc-memory",
+      "strategies": ["SUMMARIZATION", "USER_PREFERENCE", "SEMANTIC"]
+    }
+  ],
+  "credentials": [],
+  "evaluators": [],
+  "onlineEvalConfigs": [],
+  "policyEngines": []
+}

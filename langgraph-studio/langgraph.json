@@ -1,0 +1,14 @@
+{
+  "dependencies": [
+    "."
+  ],
+  "graphs": {
+    "tax_supervisor": "./src/tax_supervisor/graph.py:graph",
+    "business_agent": "./src/business_agent/graph.py:graph",
+    "income_agent": "./src/income_agent/graph.py:graph",
+    "expense_agent": "./src/expense_agent/graph.py:graph",
+    "asset_agent": "./src/asset_agent/graph.py:graph",
+    "tax_agent": "./src/tax_agent/graph.py:graph"
+  },
+  "env": ".env"
+}

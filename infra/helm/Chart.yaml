@@ -1,0 +1,13 @@
+apiVersion: v2
+name: agentic-tax-calculator
+description: Agentic Canadian tax calculator - K8s deployment
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+keywords:
+  - tax
+  - agentcore
+  - mcp
+  - langgraph
+maintainers:
+  - name: Platform Engineering
