@@ -1,15 +1,18 @@
 # Agentic Tax Calculator
 
-> **Reuse Note:** This starter kit is customer-agnostic. All source code in `src/`, configuration, agents, tax engine, guardrails, and MCP server contain no customer-specific references.
->
-> Mock data in `src/mock/data/*.json` uses fictional business names and can be used as-is or replaced with your own test data.
+Multi-agent AI starter kit for deterministic tax computation using Amazon Bedrock AgentCore, LangGraph, and MCP.
 
-Agentic Canadian tax calculator - an AWS AgentCore starter kit.
+> **Reuse Note:** This starter kit is customer-agnostic. All source code in `src/`, configuration, agents, tax engine, guardrails, and MCP server contain no customer-specific references.
+> - Mock data in `src/mock/data/*.json` uses fictional business names and can be used as-is or replaced with your own test data.
+
+> **Important:** This is sample code for demonstration and educational purposes. It is not intended for production use without additional security testing, compliance validation, and legal review. You are responsible for testing, securing, and optimizing this code as appropriate for production grade use based on your specific quality control practices and standards. The mock data included is entirely fictional and not derived from any real customer data.
+
+Agentic Canadian tax calculator - an Amazon Bedrock AgentCore starter kit.
 
 ## Overview
 
 A configurable reference implementation that uses multi-agent LangGraph orchestration
-backed by AWS AgentCore services to gather business data via MCP tool groups, then
+backed by Amazon Bedrock AgentCore services to gather business data via MCP tool groups, then
 deterministically compute federal, provincial, CPP, and EI tax liabilities for
 Canadian small businesses across all 13 provinces and territories.
 
@@ -194,6 +197,64 @@ docker build -t agentic-tax-calculator:latest .
 
 ## Architecture
 
+```mermaid
+flowchart TB
+    subgraph Client["AI Client (Copilot / Kiro / Custom)"]
+        UI[Form / Chat / CLI]
+    end
+
+    subgraph AgentCore["Amazon Bedrock AgentCore Platform"]
+        Identity["AgentCore Identity\n(OAuth 2.0)"]
+        Gateway["AgentCore Gateway\n(Tool Routing + JWT Auth)"]
+        Runtime["AgentCore Runtime\n(Serverless microVM)"]
+        Observability["AgentCore Observability\n(CloudWatch + X-Ray)"]
+        Memory["AgentCore Memory\n(Short-term + Long-term)"]
+    end
+
+    subgraph Guardrails["Security Guardrails"]
+        PII["PII Pre-Filter\n(Redaction)"]
+        AC["Access Control\n(Per-Agent Permissions)"]
+        TV["Tax Post-Validation"]
+    end
+
+    subgraph Workflow["LangGraph Orchestrator"]
+        BA["Business Agent"] --> IA["Income Agent"] & EA["Expense Agent"] & AA["Asset Agent"]
+        IA & EA & AA --> TA["Tax Agent"]
+    end
+
+    subgraph Engine["Deterministic Tax Engine"]
+        FED["Federal Tax"]
+        PROV["Provincial Tax\n(13 jurisdictions)"]
+        CPP["CPP Calculator"]
+        EI["EI Calculator"]
+    end
+
+    subgraph Data["Data Layer"]
+        Mock["Mock Data (JSON)"]
+        GQL["GraphQL API\n(OAuth 2.0 secured)"]
+    end
+
+    subgraph Storage["AWS Services"]
+        DDB["DynamoDB\n(Encrypted, IAM-scoped)"]
+        CW["CloudWatch Logs"]
+        XR["X-Ray Traces"]
+    end
+
+    UI -->|HTTPS + JWT| Identity
+    Identity --> Gateway
+    Gateway --> Runtime
+    Runtime --> PII
+    PII --> Workflow
+    Workflow --> AC
+    AC -->|Authorized tools only| Engine
+    AC --> Data
+    TA --> TV
+    Runtime --> Memory
+    Memory --> DDB
+    Runtime --> Observability
+    Observability --> CW & XR
+```
+
 ### Request Flow
 
 ```
@@ -278,12 +339,115 @@ AB, BC, MB, NB, NL, NS, NT, NU, ON, PE, QC, SK, YT
 
 ## Phase 2 (Planned)
 
-- Bank Transaction PDF Import (Textract + Claude 3.5)
+- Bank Transaction PDF Import (Amazon Textract + Claude 3.5)
 - US Tax Support (IRS federal + state brackets)
 
 ## Security
 
-See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
+This application processes sensitive financial data. Security responsibilities follow the [AWS Shared Responsibility Model](https://aws.amazon.com/compliance/shared-responsibility-model/).
+
+**AWS is responsible for security OF the cloud:**
+- Amazon Bedrock AgentCore Runtime infrastructure security
+- Amazon Bedrock model security and compliance
+- DynamoDB encryption at rest
+- Network infrastructure protection
+
+**You are responsible for security IN the cloud:**
+- Application code security
+- Authentication configuration (Okta/Cognito)
+- PII filter rules and testing
+- Access control policies
+- Security testing and validation
+
+### Data Flow Security
+
+PII is filtered at each stage of the request lifecycle:
+
+```
+Client Input → PII Pre-Filter (redacts SIN, bank accounts, addresses)
+    → LLM Orchestration (receives only sanitized data)
+    → MCP Tools (access controlled per agent)
+    → Tax Engine (deterministic, no PII stored)
+    → Response Post-Validation (checks for data leakage)
+    → Memory Storage (aggressive filter_for_memory() applied)
+```
+
+All data in transit uses TLS 1.2+. GraphQL endpoints enforce HTTPS in production mode.
+
+### Data Classification and Handling
+
+| Classification | Examples | Handling |
+|---------------|----------|----------|
+| **Restricted** | SIN numbers, bank account numbers, personal addresses | Redacted by PII filter before LLM processing and memory storage. Never persisted in plain text. |
+| **Confidential** | Tax calculations, revenue figures, expense details | Encrypted at rest (DynamoDB), access controlled via IAM, 90-day default retention in memory |
+| **Internal** | Business names, jurisdictions, accounting methods | Encrypted at rest, access controlled via IAM |
+| **Public** | Tax bracket rules, CRA rates, provincial rates | No special handling required |
+
+Data retention: Memory defaults to 90 days (configurable via `TAX_CALC_MEMORY_RETENTION_DAYS`). DynamoDB tables use TTL for automatic expiry. For tax compliance, organizations may need 7-year retention for calculation records.
+
+### Key Management
+
+This project uses **AWS-managed encryption keys** for DynamoDB tables. Rationale:
+
+- Operational simplicity for sample code and development environments
+- AWS automatically rotates AWS-managed keys annually
+- No additional KMS costs or key policy management required
+- Encryption at rest is always enabled (cannot be disabled)
+
+For production deployments requiring customer-managed keys:
+1. Create a KMS key with appropriate key policy
+2. Update `cdk_app.py`: change `encryption=dynamodb.TableEncryption.AWS_MANAGED` to `dynamodb.TableEncryption.CUSTOMER_MANAGED` with your key
+3. Grant the AgentCore Runtime role `kms:Encrypt`, `kms:Decrypt`, `kms:GenerateDataKey` on the key
+4. Enable automatic key rotation
+5. Restrict key access to the Runtime role and authorized administrators
+
+AgentCore Memory uses AWS-owned keys (managed entirely by the service, no customer visibility or management needed).
+
+### Quick Security Setup
+
+```bash
+# Configure authentication
+export TAX_CALC_OKTA_DOMAIN=your-domain.okta.com
+export TAX_CALC_OKTA_CLIENT_ID=<client-id>
+export TAX_CALC_OKTA_CLIENT_SECRET=<secret>
+
+# Run PII filter tests
+python -m pytest tests/ -k pii -v
+
+# Run dependency vulnerability scan
+pip-audit
+
+# Review access control matrix
+# See src/guardrails/access_control.py for agent-to-tool permissions
+```
+
+> **Disclaimer:** Tax calculations produced by this system are for informational and demonstration purposes only. Results should be verified by a licensed tax professional before use in any financial decision-making. The LLM is used only for orchestration - all tax computations use the deterministic rules engine in `src/tax_engine/`.
+
+### Bias and Fairness
+
+The LLM orchestration layer is designed for equitable treatment across all supported jurisdictions and business types:
+
+- **Jurisdiction fairness:** All 13 Canadian provinces and territories use identical orchestration flows. No jurisdiction receives different treatment in tool selection or data gathering.
+- **Business type equity:** The agent workflow is deterministic in structure (Business -> Income/Expense/Asset in parallel -> Tax). Business size, type, or name does not influence orchestration routing.
+- **Testing methodology:** Integration tests verify consistent orchestration behavior across all supported jurisdictions. Mock data includes businesses of varying sizes to confirm no systematic bias.
+- **Monitoring:** Post-validation guardrails verify calculation correctness independent of orchestration path. Anomalous routing patterns are logged via AgentCore Observability.
+
+See [SECURITY.md](SECURITY.md) "Bias and Fairness Considerations" for detailed analysis.
+
+This is sample code for non-production usage. You should work with your security and legal teams to meet your organizational security, regulatory, and compliance requirements before deployment.
+
+See [SECURITY.md](SECURITY.md) for the full threat model and production checklist.
+See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for reporting security issues.
+
+### Security Testing Results
+
+This sample code has undergone security scanning as part of the PCSR (Public Content Security Review) process:
+
+- **Static analysis:** AWS Slingshot (May 2026) - All HIGH/CRITICAL code-level findings remediated. 2 false positives documented (Bandit B105 - empty string OAuth placeholders).
+- **Dependency scan:** pip-audit - 0 known vulnerabilities at time of publication.
+- **Detailed results:** See [SECURITY_SCAN_RESULTS.md](SECURITY_SCAN_RESULTS.md) for complete findings, remediations, and compensating controls.
+
+**Important:** This is sample code. You must perform your own security testing and validation before production deployment. Run `pip-audit` and your organization's SAST tools against the codebase before deploying with real data.
 
 ## License
 
