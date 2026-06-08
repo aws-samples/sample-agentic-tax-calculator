@@ -20,7 +20,7 @@ The system works **out of the box with mock data** - no external credentials nee
 Swap to real services by changing environment variables only.
 
 
-![Architecture](docs/architecture.png)
+![Architecture](agentic_tax_calculator_architecture.png)
 
 
 ## Prerequisites
