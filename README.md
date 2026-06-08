@@ -19,6 +19,10 @@ Canadian small businesses across all 13 provinces and territories.
 The system works **out of the box with mock data** - no external credentials needed.
 Swap to real services by changing environment variables only.
 
+
+![Architecture](docs/architecture.png)
+
+
 ## Prerequisites
 
 - **Python 3.11+**
